@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /* Une entité JPA est un java bean. Un java bean est une classe serialisable.
  * Dans laquelle on déclare les attributs avec des getters / setters.
@@ -20,7 +23,12 @@ import javax.persistence.Id;
 public class Produit implements Serializable{
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotNull							// -> annotation de validation : pas null
+	@Size(min=5, max=70)                // -> annotation de validation : taille entre 5 et 70.
 	private String designation;
+	
+	@DecimalMin("50")
 	private double prix;
 	private int quantite;
 	
@@ -50,7 +58,7 @@ public class Produit implements Serializable{
 	}
 	public Produit() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public Produit(Long id, String designation, double prix, int quantite) {
 		super();

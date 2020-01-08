@@ -2,18 +2,25 @@ package com.start2sparkle.web;
 
 import java.util.List;
 
+import javax.management.modelmbean.ModelMBean;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.start2sparkle.dao.ProduitRepository;
 import com.start2sparkle.entities.Produit;
+
+import javassist.expr.NewArray;
 
 
 @Controller			// -> Un controller est une classe qui utilise l'annotation Controller
@@ -56,5 +63,23 @@ public class ProduitController {
 		produitRepository.deleteById(id);
 		return "redirect:/index?page=" + page + "&motCle=" + motCle;
 	}
-
+	
+	@GetMapping("/formProduit")
+	public String form(Model model) {
+		model.addAttribute("produit", new Produit()); 		// valeur par default d'un produit est à zéro.
+															// Va afficher les valeurs par defaut dans la page add produit.
+		return "formProduit";
+	}
+	
+	@PostMapping("/save")
+	public String save(Model model, @Valid Produit produit, BindingResult bindingResult) {         
+		// -> @Valid : on demande à faire une validation des données avant le stockage.
+		// -> Si il y a des erreurs, il va stocker les erreurs dans un BindingResult.
+		// -> On fait ensuite un test. Si il y a des erreur pas la peine de faire save, on retourne directement fromProduit sans faire de save.
+		// -> On declare un model dans l'appel de la methode parceque dans il va generer des erreurs, il va le stocker dans le model.
+		
+		if(bindingResult.hasErrors()) return "formProduit";		
+		produitRepository.save(produit);
+		return "formProduit";
+	}
 }
