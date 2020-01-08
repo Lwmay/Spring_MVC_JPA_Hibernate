@@ -17,21 +17,31 @@
 				<div class="panel-body">
 				
 					<form th:action="@{/save}" method="post">
+					
+						<div class="form-group">
+							<label class="control-label">Id : </label> <label th:text="${produit.id}"></label> 
+							<input class="form-control" type="hidden" name="id" 
+							th:value="${produit.id}">
+						</div>
 						<div class="form-group">
 							<label class="control-label">Designation :</label> 
-							<input class="form-control" type="text" name="designation" th:value="${produit.designation}">
+							<input class="form-control" type="text" name="designation" 
+							th:value="${produit.designation}">
 							<span th:errors="${produit.designation}" class="text-danger"></span>
 						</div>
 						<div class="form-group">
 							<label class="control-label">Prix :</label> 
-							<input class="form-control" type="text" name="prix" th:value="${produit.prix}">
+							<input class="form-control" type="text" name="prix" 
+							th:value="${produit.prix}">
 							<span th:errors="${produit.prix}" class="text-danger"></span>
 						</div>
 						<div class="form-group">
 							<label class="control-label">Quantité :</label> 
-							<input class="form-control" type="text" name="quantité" th:value="${produit.quantite}">
+							<input class="form-control" type="text" name="quantité" 
+							th:value="${produit.quantite}">
 						</div>
 						<button type="submit" class="btn btn-primary">Save</button>
+						
 					</form>
 					
 				</div>

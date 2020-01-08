@@ -71,6 +71,13 @@ public class ProduitController {
 		return "formProduit";
 	}
 	
+	@GetMapping("/edit")
+	public String edit(Model model, Long id) { 					// Pour editer on récupere le id.
+		Produit produit=produitRepository.findById(id).get();	// 	On cherche le produit à partir de la base de données.
+		model.addAttribute("produit",produit);					// On le stock dans le model
+		return "editProduit";
+	}
+	
 	@PostMapping("/save")
 	public String save(Model model, @Valid Produit produit, BindingResult bindingResult) {         
 		// -> @Valid : on demande à faire une validation des données avant le stockage.
@@ -80,6 +87,6 @@ public class ProduitController {
 		
 		if(bindingResult.hasErrors()) return "formProduit";		
 		produitRepository.save(produit);
-		return "formProduit";
+		return "redirect:/index";
 	}
 }
