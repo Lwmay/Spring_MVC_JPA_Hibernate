@@ -31,7 +31,7 @@ public class ProduitController {
 	private ProduitRepository produitRepository;
 	
 	//@RequestMapping(value="/index", method=RequestMethod.GET)
-	@GetMapping("/index")
+	@GetMapping("/user/index")
 	public String index(Model model,
 			@RequestParam(name="page", defaultValue ="0") int page, 		// -> par default la valeur est 0.
 			@RequestParam(name="motCle", defaultValue ="") String mc){     // -> par default la valeur est une chaine vide.
@@ -58,27 +58,32 @@ public class ProduitController {
 									// dans le html on fait une boulbe sur le tableau pour afficher les différentes pages.
 	}
 	
-	@GetMapping("/delete")
+	@GetMapping("/admin/delete")
 	public String delete(Long id, int page, String motCle) {
 		produitRepository.deleteById(id);
-		return "redirect:/index?page=" + page + "&motCle=" + motCle;
+		return "redirect:/user/index?page=" + page + "&motCle=" + motCle;
 	}
 	
-	@GetMapping("/formProduit")
+	@GetMapping("/admin/formProduit")
 	public String form(Model model) {
 		model.addAttribute("produit", new Produit()); 		// valeur par default d'un produit est à zéro.
 															// Va afficher les valeurs par defaut dans la page add produit.
 		return "formProduit";
 	}
 	
-	@GetMapping("/edit")
+	@GetMapping("/")
+	public String def() {
+		return "redirect:/user/index";
+	}
+	
+	@GetMapping("/admin/edit")
 	public String edit(Model model, Long id) { 					// Pour editer on récupere le id.
 		Produit produit=produitRepository.findById(id).get();	// 	On cherche le produit à partir de la base de données.
 		model.addAttribute("produit",produit);					// On le stock dans le model
 		return "editProduit";
 	}
 	
-	@PostMapping("/save")
+	@PostMapping("/admin/save")
 	public String save(Model model, @Valid Produit produit, BindingResult bindingResult) {         
 		// -> @Valid : on demande à faire une validation des données avant le stockage.
 		// -> Si il y a des erreurs, il va stocker les erreurs dans un BindingResult.
@@ -87,6 +92,6 @@ public class ProduitController {
 		
 		if(bindingResult.hasErrors()) return "formProduit";		
 		produitRepository.save(produit);
-		return "redirect:/index";
+		return "redirect:/user/index";
 	}
 }
